@@ -60,6 +60,9 @@ def zupdatefiles():
     get_all_binance("BTCUSDT","5m",save=True)
     get_all_binance("BTCUSDT","1m",save=True)
 
+if __name__ == "__main__":
+    zupdatefiles()
+
 # def get_all_bitmex(symbol, kline_size, save = False):
 #     filename = '%s-%s-data.csv' % (symbol, kline_size)
 #     if os.path.isfile(filename): data_df = pd.read_csv(filename)
