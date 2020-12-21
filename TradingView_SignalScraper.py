@@ -158,25 +158,25 @@ def run():
 				mlog(market, signal)
 			signals_list.append(signal1)
 			# tweet(msg)
-		save_signals(market_list, candle_list, signals_list)
+		# save_signals(market_list, candle_list, signals_list)
 
 		time.sleep(60*5)
 
-def save_signals(market_list, candle_list, signals_list):
-	with open("SignalsFile.csv", "a") as f1:
-		f1.writelines("\n"+str(datetime.datetime.now())+"\n")
-		#Format Output to be easily loaded into Microsoft Excel
-		"""for ex in ['[', ']']:
-			for ex1 in [market_list, candle_list, signals_list]:
-				ex1.strip(ex)
-		for coin in market_list:
-			for candle in candle_list:
-		"""
+# def save_signals(market_list, candle_list, signals_list):
+# 	with open("SignalsFile.csv", "a") as f1:
+# 		f1.writelines("\n"+str(datetime.datetime.now())+"\n")
+# 		#Format Output to be easily loaded into Microsoft Excel
+# 		"""for ex in ['[', ']']:
+# 			for ex1 in [market_list, candle_list, signals_list]:
+# 				ex1.strip(ex)
+# 		for coin in market_list:
+# 			for candle in candle_list:
+# 		"""
 
-		f1.writelines(str(market_list)+"\n")
-		#f1.writelines(str(candle_list)+"\n")
-		for lines in signals_list:
-			f1.writelines(str(lines)+"\n")
+# 		f1.writelines(str(market_list)+"\n")
+# 		#f1.writelines(str(candle_list)+"\n")
+# 		for lines in signals_list:
+# 			f1.writelines(str(lines)+"\n")
 
 
 # def tweet(msg):
