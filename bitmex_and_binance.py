@@ -17,7 +17,7 @@ binance_api_key = bkeys.api_key    #Enter your own API-key here
 binance_api_secret = bkeys.secret_key #Enter your own API-secret here
 
 ### CONSTANTS
-binsizes = {"1m": 1, "5m": 5, "1h": 60, "1d": 1440}
+binsizes = {"1m": 1, "5m": 5, "30m": 30, "1h": 60, "4h": 240, "1d": 1440}
 batch_size = 750
 #bitmex_client = bitmex(test=False, api_key=bitmex_api_key, api_secret=bitmex_api_secret)
 binance_client = Client(api_key=binance_api_key, api_secret=binance_api_secret)
@@ -52,6 +52,13 @@ def get_all_binance(symbol, kline_size, save = False):
     if save: data_df.to_csv(filename)
     print('All caught up..!')
     return data_df
+
+def zupdatefiles():
+    get_all_binance("BTCUSDT","4h",save=True)
+    get_all_binance("BTCUSDT","1h",save=True)
+    get_all_binance("BTCUSDT","30m",save=True)
+    get_all_binance("BTCUSDT","5m",save=True)
+    get_all_binance("BTCUSDT","1m",save=True)
 
 # def get_all_bitmex(symbol, kline_size, save = False):
 #     filename = '%s-%s-data.csv' % (symbol, kline_size)
