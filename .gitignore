@@ -142,7 +142,7 @@ dmypy.json
 .prof
 
 ### VisualStudioCode ###
-.vscode/*
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -158,4 +158,11 @@ dmypy.json
 
 bkeys.py
 *.csv
-*.ipynb
+tester.ipynb
+/logs/
+/scalers/
+/models/
+/data/
+/temp/
+/tuners/
+code/models/Copy_of_timeseries_transformer_classification.ipynb

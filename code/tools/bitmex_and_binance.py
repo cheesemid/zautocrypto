@@ -1,10 +1,12 @@
+#!/usr/bin/env python3
+
 # IMPORTS
 import pandas as pd
 import math
 import os.path
 import time
 #from bitmex import bitmex
-from binance.client import Client
+from binance.client import Client # python-binance
 from datetime import timedelta, datetime
 from dateutil import parser
 #from tqdm import tqdm_notebook #(Optional, used for progress-bars)
@@ -23,6 +25,8 @@ batch_size = 750
 binance_client = Client(api_key=binance_api_key, api_secret=binance_api_secret)
 
 
+datadir = ""
+
 ### FUNCTIONS
 def minutes_of_new_data(symbol, kline_size, data, source):
     if len(data) > 0:  old = parser.parse(data["timestamp"].iloc[-1])
@@ -33,7 +37,7 @@ def minutes_of_new_data(symbol, kline_size, data, source):
     return old, new
 
 def get_all_binance(symbol, kline_size, save = False):
-    filename = '%s-%s-data.csv' % (symbol, kline_size)
+    filename = os.path.join(datadir, '%s-%s-data.csv' % (symbol, kline_size))
     if os.path.isfile(filename): data_df = pd.read_csv(filename)
     else: data_df = pd.DataFrame()
     oldest_point, newest_point = minutes_of_new_data(symbol, kline_size, data_df, source = "binance")
@@ -54,11 +58,16 @@ def get_all_binance(symbol, kline_size, save = False):
     return data_df
 
 def zupdatefiles():
-    get_all_binance("BTCUSDT","4h",save=True)
-    get_all_binance("BTCUSDT","1h",save=True)
-    get_all_binance("BTCUSDT","30m",save=True)
-    get_all_binance("BTCUSDT","5m",save=True)
-    get_all_binance("BTCUSDT","1m",save=True)
+    global datadir
+
+    datadir = "data/unformatted"
+    tickers = ["BTCUSDT", "ETHUSDT", "ADAUSDT", "SOLUSDT", "XRPUSDT", "LTCUSDT"]
+    periods = ["4h", "1h", "30m", "5m", "1m"]
+
+
+    for t in tickers:
+        for p in periods:
+            get_all_binance(t, p, save=True)
 
 if __name__ == "__main__":
     zupdatefiles()

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+
+# absolute hot garbage
+# please do not use unless you dont care at all about money
+
 from time import sleep
 from TradingView_SignalScraper import *
 from binance.client import Client

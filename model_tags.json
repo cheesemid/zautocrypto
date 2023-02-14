@@ -1,0 +1,16 @@
+{
+    "TANH2":[
+        {
+            "name": "",
+            "comment": "(LSTM(128) -> Dropout -> BatchNorm) x 3 -> Dense(32) -> Dropout -> Dense"
+        },
+        {
+            "name": "lg",
+            "comment": "(LSTM(128) -> Dropout -> BatchNorm) x 5 -> Dense(32) -> Dropout -> Dense"
+        },
+        {
+            "name": "wd",
+            "comment":"(LSTM(512) -> Dropout -> BatchNorm) x 3 -> Dense(64) -> Dropout -> Dense"
+        }
+    ]
+}

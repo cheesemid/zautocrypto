@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import talib
 
+import time
+
 """
     ===Ta-Lib Install===
     Links:
@@ -48,17 +50,55 @@ def bbands(df, column="close", period=20):
     upperBB, middleBB, lowerBB = talib.BBANDS(df[column], timeperiod=period, nbdevup=2, nbdevdn=2, matype=0)
     return [upperBB,middleBB,lowerBB]
 
-if __name__ == "__main__":
+def neuraldfinput(df, column="close"):
+    slowemaS = ema(df,column)
+    fastemaS = ema(df,column,period=30)
+    rsiS = rsi(df)
+    bbandsS = bbands(df,column) ## nninput should be delta between price and bbands
+
+    deltaemalist = []
+    for i in range(len(slowemaS)):
+        deltaemalist.append(fastemaS[i]-slowemaS[i])
+
+    deltaemaS = pd.Series(deltaemalist)
+
+    outputdf = pd.DataFrame(columns = ["close", "deltaema", "rsi", "upperbb", "middlebb", "lowerbb"])
+    outputdf["close"],outputdf["deltaema"],outputdf["rsi"],outputdf["upperbb"],outputdf["middlebb"],outputdf["lowerbb"] = df[column],deltaemaS,rsiS,bbandsS[0],bbandsS[1],bbandsS[2]
+    return outputdf
+
+
+#tester fxns
+def simpleplotter(datapoints=500):
     df = loadcsv("BTCUSDT-1h-data.csv")
-    datapoints = 500
     df["close"].head(datapoints).plot()
-    ##print(ema(df))
-    ##print(df)
     ema(df).head(datapoints).plot()
     ema(df, period=30).head(datapoints).plot()
     #rsi(df).head(200).plot()
     for i in bbands(df):
         i.head(datapoints).plot()
-    
-    #print(talib.get_functions())
-    #print(talib.get_function_groups())
+
+def avgpctpricemovement(df):
+    sum = 0
+    prevprice = df["close"][0]
+    for price in df["close"]:
+        sum += (price - prevprice)/prevprice
+
+    avg = sum / len(df["close"])
+    return avg
+
+def nndatatest():
+    indf = loadcsv("BTCUSDT-1h-data.csv")
+    outdf = neuraldfinput(indf)
+    outdf.head(500).plot()
+    return 0
+
+def lastmindelta():
+    df = loadcsv("BTCUSDT-1m-data.csv")
+    stamplist = list(df["close_time"])
+    laststamp = int(stamplist[-1])/1000
+    delta = int(time.time()) - int(laststamp)
+    print(delta)
+
+if __name__ == "__main__":
+    #nndatatest()
+    lastmindelta()

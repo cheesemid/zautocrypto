@@ -145,13 +145,12 @@ class TwitterClient(object):
             # print error (if any)
             print("Error : " + str(e))
 
-def main():
+def main(query=["Bitcoin"], tweetcount=200, save=False):
     # creating object of TwitterClient Class
     api = TwitterClient()
     # calling function to get tweets
-    search_term = 'Bitcoin'
-    list_coins=['Bitcoin'] #, 'Ethereum', 'EOS', 'Cryptocurrency', 'Blockchain', 'BTC'] #'Donald Trump', 'Barack Obama', 'George Washington']
-    count1=200
+    list_coins=query #, 'Ethereum', 'EOS', 'Cryptocurrency', 'Blockchain', 'BTC'] #'Donald Trump', 'Barack Obama', 'George Washington']
+    count1=tweetcount
     list_coin_val = []
     start_time = datetime.now()
     try:
@@ -164,7 +163,7 @@ def main():
                 ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
                 # percentage of positive tweets
                 print("\n\nTime: {}".format(str(datetime.now())))
-                print("Sentiment Values for {}\nNumber of Tweets Analyzed: {}".format(coin, count1))
+                print("Sentiment Values for: {}\nNumber of Tweets Analyzed: {}".format(coin, count1))
                 positive_tweet_percentage = round(100*len(ptweets)/len(tweets),6)
                 print("Positive tweets percentage: {} %".format(positive_tweet_percentage))
                 # picking negative tweets from tweets
@@ -178,22 +177,23 @@ def main():
                     ".format(neutral_tweet_percentage))
                 current_price = getBitcoinPrice()
                 list_coin_val.append([coin, positive_tweet_percentage, negative_tweet_percentage, neutral_tweet_percentage, str(datetime.now()), current_price])
-                save_to_file(coin, positive_tweet_percentage, negative_tweet_percentage, neutral_tweet_percentage, datetime.now(), current_price, "SentimentHistorical.csv")
-                print("Current Price: {}".format(getBitcoinPrice()))
-                trading(current_price, positive_tweet_percentage, negative_tweet_percentage)    #used for Trading Signals
-            time.sleep(30)
+                if save:
+                    save_to_file(coin, positive_tweet_percentage, negative_tweet_percentage, neutral_tweet_percentage, datetime.now(), current_price, "SentimentHistorical.csv")
+                print("Current BTC Price: {}".format(getBitcoinPrice()))
+                # trading(current_price, positive_tweet_percentage, negative_tweet_percentage)    #used for Trading Signals
+            # time.sleep(30)
         end_time = datetime.now()
         print(list_coin_val, start_time, end_time)
     except:
         print("ERROR - COLLECTING DATA")
-    try:
-        #msg = 'Sentiment Analysis - Twitter \nvia @BlockchainEngineer \n\n #cryptocurrency #bitcoin #bitcointrading'
-        #filename = 'SentimentAnalysis.png'
-        #api.tweet_file()
-        data_visualize(api, list_coin_val, start_time, end_time)
-        #historic_data_viz(api)
-    except:
-        print("ERROR - COLLECTING DATA")
+    # try:
+    #     #msg = 'Sentiment Analysis - Twitter \nvia @BlockchainEngineer \n\n #cryptocurrency #bitcoin #bitcointrading'
+    #     #filename = 'SentimentAnalysis.png'
+    #     #api.tweet_file()
+    #     data_visualize(api, list_coin_val, start_time, end_time)
+    #     #historic_data_viz(api)
+    # except:
+    #     print("ERROR - COLLECTING DATA")
 
 def save_to_file(coin, positive_tweet_percentage, negative_tweet_percentage, neutral_tweet_percentage, time, current_price, filename = "SentimentHistorical.csv"):
     with open(filename, 'a+') as  f:
@@ -211,7 +211,8 @@ def getBitcoinPrice():
 def tweet_file(self, message, filename):
     #message = "Sentiment Analysis by @BlockchainEng"
     #filename ='SentimentAnalysis.png'
-    self.api.update_with_media(message, filename)
+    # self.api.update_with_media(message, filename)
+    pass
 
 def historic_data_viz(self):
     #Load Historic Data and Visual into graph form for entire recorded amount
@@ -305,9 +306,9 @@ def data_visualize(api, list_coins, start_time, end_time):
     filename='SentimentAnalysis.png' #+str(start_time).strip()+'.png'
     fig.savefig(filename)
     #tweet out fig and message
-    msg = "@Twitter Sentiment Analysis for conversation around #Bitcoin - 200 tweets measured each cycle"
-    msg+= "\n\n Includes price. \n\nvia @BlockchainEng \n\n #SentimentAnalysis #BitcoinTrading #Bitcoin"
-    api.tweet_file()
+    # msg = "@Twitter Sentiment Analysis for conversation around #Bitcoin - 200 tweets measured each cycle"
+    # msg+= "\n\n Includes price. \n\nvia @BlockchainEng \n\n #SentimentAnalysis #BitcoinTrading #Bitcoin"
+    # api.tweet_file()
     """
     # printing first 5 positive tweets
     print("\n\nPositive tweets:")
@@ -322,5 +323,6 @@ def data_visualize(api, list_coins, start_time, end_time):
 
 if __name__ == "__main__":
     # calling main function
-    while 1:
-        main()
+    main(query=["Bitcoin"], tweetcount=10000)
+    # sleep(1)
+    # quit()
